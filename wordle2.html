@@ -1,0 +1,95 @@
+<!DOCTYPE>
+<html lang="en">
+    <head>
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js"></script>
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <style>
+            body{background-color: black; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;}
+            .square {
+                display: inline-block;
+                width: 100px;
+                height: 100px; 
+                background-color: rgb(67, 67, 67); 
+                color: white;
+                text-align: center;
+                line-height: 100px;
+                border-style: solid;
+                border-color: rgb(255, 255, 255);
+                font-size: 50px;
+                margin: 2px;
+            }
+            .keys {
+                display: inline-block;
+                width: 50px;
+                height: 75px;
+                background-color: rgb(67, 67, 67);
+                color: white;
+                text-align: center;
+                line-height: 100px;
+                font-size: 25px;
+                margin: 2px;
+                border-style: solid;
+                border-color: rgb(255, 255, 255);
+            }
+            .green {background-color:green}
+            .yellow {background-color: rgb(230, 214, 0)}
+            .grey {background-color: rgb(67, 67, 67);}
+            .board {width: 550px; margin:0 auto;}
+            .keyboard {width: 600px; margin:0 auto;}
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <div id="kapp"></div>
+        <script type="text/babel">
+            function Guess(letter,color = "grey"){
+                this.letter = letter;
+                this.color = color;
+            }
+            var correctText = "MOODY";
+            var guesses = ["MIGHT","FLOODS","STRAY","MOODY"];
+            var letters = guesses.map(checkLetter);
+
+            function checkLetter(item)
+            {
+                var colorWord = [];
+                for(let i=0;i<5;i++)
+                {
+                    if(item[i] == correctText[i])
+                    {
+                        colorWord[i] = new Guess(item[i],"green");
+                    }
+                    else if(correctText.includes(item[i]))
+                    {
+                        colorWord[i] = new Guess(item[i],"yellow");
+                    }
+                    else
+                    {
+                        colorWord[i] = new Guess(item[i]);
+                    }
+                }
+                return colorWord;
+            }
+            if (letters.length < 6)
+            {
+                for(let i=0;i<=6-letters.length;i++)
+                {
+                    letters.push([new Guess(" "),new Guess(" "),new Guess(" "),new Guess(" "),new Guess(" ")]);
+                }
+            }
+            var keys1 = ['Q','W','E','R','T','Y','U','I','O','P'];
+            var keys2 = ['A','S','D','F','G','H','J','K','L'];
+            var keys3 = ['ENT','Z','X','C','V','B','N','M','<='];
+            var allkeys = [keys1,keys2,keys3];
+            var board = <div key="cont" className="board">{letters.map((word,i) =>
+                 <div key={i}>{word.map((item,j)=>
+                    <div key={j} className={item.color + " square"}>{item.letter}</div>)}</div>)}</div>
+            var keyboard = <div key="kont" className="keyboard">{allkeys.map((item,i)=>
+                <div key={"row"+i}>{item.map((k,j)=>
+                    <div key={i + j} className="keys">{k}</div>)}</div>)}</div>
+            ReactDOM.render(board,app);
+            ReactDOM.render(keyboard,kapp);
+        </script>
+    </body>
+</html>
